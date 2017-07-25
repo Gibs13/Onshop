@@ -55,7 +55,7 @@ app.post('/', function (req, res) {
         }
 
         assistant.askWithList(assistant.buildRichResponse()
-        .addSimpleResponse(),list);
+        .addSimpleResponse(prompt),list);
       } else {
           assistant.ask(prompt);
       }
