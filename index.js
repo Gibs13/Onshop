@@ -45,8 +45,8 @@ app.post('/', function (req, res) {
 
       let prompt = 'colors';
       let colours = assistant.data.colours;
-      if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
-        assistant.setContext('select-color',1)
+      assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)
+        assistant.setContext('validate',3);
         let list = assistant.buildList();
         for (let i=0;i<colours.length;i++) {
           list.addItems(assistant.buildOptionItem(colours[i],colours[i])
@@ -56,9 +56,6 @@ app.post('/', function (req, res) {
 
         assistant.askWithList(assistant.buildRichResponse()
         .addSimpleResponse(prompt),list);
-      } else {
-          assistant.ask(prompt);
-      }
     }
 
     function navigate(assistant) {
@@ -80,7 +77,7 @@ app.post('/', function (req, res) {
 
     function selectedColor(assistant){
       assistant.data.color = assistant.getContextArgument('actions_intent_option','OPTION').value;
-      validate(assistant);
+      recapCard(assistant);
     }
 
     function selectedShoe(){}
@@ -88,11 +85,24 @@ app.post('/', function (req, res) {
     function change(){}
 
     function validate(assistant){
+      assistant.askForDeliveryAddress('to send your new shoes');
+      
+    }
+
+    function shoeInfo(){}
+
+    function change(assistant){
+      let c = assistant.getArgument('changes');
+
+    }
+
+    function recapCard(assistant){
       let prompt = 'validation';
       let color = assistant.data.color;
       let shoe = assistant.data.shoe;
+      assistant.setContext('select-color',1);
       let basicCard = assistant.buildBasicCard()
-        .setTitle('PRICE : '+chaussures[shoe].price+"€")
+        .setTitle('PRICE : '+chaussures[shoe].price+" €")
         .setBodyText(descriptions[shoe])
         .setImage(IMAGE+shoe+'_'+color.replace(/ /g,"_")+'.jpg', shoe.toLowerCase());
       let richResponse = assistant.buildRichResponse()
@@ -101,16 +111,15 @@ app.post('/', function (req, res) {
         assistant.ask(richResponse);
     }
 
-    function shoeInfo(){}
-
-    function recapCard(){}
-
     // Mapping intentions
 
     let actionMap = new Map();
 
     actionMap.set('commander', commander);
     actionMap.set('selectedColor', selectedColor);
+    actionMap.set('validate',validate);
+    actionMap.set('change',change);
+
 
     assistant.handleRequest(actionMap);
 });
