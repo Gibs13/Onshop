@@ -46,7 +46,7 @@ app.post('/', function (req, res) {
       let prompt = 'colors';
       let colours = assistant.data.colours;
       assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)
-        assistant.setContext('validate',3);
+        assistant.setContext('select-color',3);
         let list = assistant.buildList();
         for (let i=0;i<colours.length;i++) {
           list.addItems(assistant.buildOptionItem(colours[i],colours[i])
@@ -86,7 +86,7 @@ app.post('/', function (req, res) {
 
     function validate(assistant){
       assistant.askForDeliveryAddress('to send your new shoes');
-      
+
     }
 
     function shoeInfo(){}
@@ -100,7 +100,7 @@ app.post('/', function (req, res) {
       let prompt = 'validation';
       let color = assistant.data.color;
       let shoe = assistant.data.shoe;
-      assistant.setContext('select-color',1);
+      assistant.setContext('validate',1);
       let basicCard = assistant.buildBasicCard()
         .setTitle('PRICE : '+chaussures[shoe].price+" €")
         .setBodyText(descriptions[shoe])
