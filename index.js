@@ -25,7 +25,7 @@ app.post('/', function (req, res) {
 
     function possible(shoes,size,assistant) {
       
-      assistant.data.colors = [];
+      assistant.data.colours = [];
       let number = chaussures[shoes]['size'][size];
       let colors = chaussures[shoes]['colors'];
       let i = 0;
