@@ -75,7 +75,7 @@ app.post('/', function (req, res) {
     }
 
     function selectedColor(assistant){
-      assistant.data.color = assistant.getContextArgument('actions_intent_option','OPTION').value;
+      assistant.data.color = assistant.getArgument("colours")? assistant.getArgument("colours"):assistant.getContextArgument('actions_intent_option','OPTION').value;
       recapCard(assistant);
     }
 
