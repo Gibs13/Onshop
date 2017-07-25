@@ -4,7 +4,7 @@ let ApiAiApp = require('actions-on-google').ApiAiApp;
 let express = require('express');
 let bodyParser = require('body-parser');
 let chaussures = require('./ressources/chaussures.js');
-
+let descriptions = require('./ressources/descriptions.js');
 let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
 app.use('/images', express.static('ressources'));
@@ -23,11 +23,11 @@ app.post('/', function (req, res) {
         return array[Math.floor(Math.random() * (array.length))];
     }
 
-    function possible(shoes,size,assistant) {
+    function possibleColor(shoe,size,assistant) {
       
       assistant.data.colours = [];
-      let number = chaussures[shoes]['size'][size];
-      let colors = chaussures[shoes]['colors'];
+      let number = chaussures[shoe]['size'][size];
+      let colors = chaussures[shoe]['colors'];
       let i = 0;
       let a = 0;
       for (i;i<colors.length;i++) {
@@ -46,7 +46,7 @@ app.post('/', function (req, res) {
       let prompt = 'colors';
       let colours = assistant.data.colours;
       if (assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)) {
-
+        assistant.setContext('select-color',1)
         let list = assistant.buildList();
         for (let i=0;i<colours.length;i++) {
           list.addItems(assistant.buildOptionItem(colours[i],colours[i])
@@ -72,19 +72,33 @@ app.post('/', function (req, res) {
 
       // On récupère la taille et le modèle de la chaussure puis on va chercher les couleurs possibles
 
-      assistant.data.shoes = assistant.getContextArgument('commander','shoes').value;
+      assistant.data.shoe = assistant.getContextArgument('commander','shoes').value;
       assistant.data.size = assistant.getContextArgument('commander','size').value;
-      possible(assistant.data.shoes,assistant.data.size,assistant);
+      possibleColor(assistant.data.shoe,assistant.data.size,assistant);
 
     }
 
-    function giveColor(){}
+    function selectedColor(assistant){
+      assistant.data.color = assistant.getContextArgument('actions_intent_option','OPTION').value;
+      validate(assistant);
+    }
 
-    function giveShoe(){}
+    function selectedShoe(){}
 
     function change(){}
 
-    function validate(){}
+    function validate(assistant){
+      let prompt = 'validation';
+      let color = assistant.data.color;
+      let shoe = assistant.data.shoe;
+      let basicCard = assistant.buildBasicCard()
+        .setBodyText('price'+chaussures[shoe].price+"\n"+descriptions[shoe])
+        .setImage(IMAGE+shoe+'_'+color.replace(/ /g,"_"), shoe.toLowerCase());
+      let richResponse = assistant.buildRichResponse()
+        .addSimpleResponse(prompt)
+        .addBasicCard(basicCard);
+        assistant.ask(richResponse);
+    }
 
     function shoeInfo(){}
 
@@ -95,7 +109,7 @@ app.post('/', function (req, res) {
     let actionMap = new Map();
 
     actionMap.set('commander', commander);
-
+    actionMap.set('selectedColor', selectedColor);
 
     assistant.handleRequest(actionMap);
 });
