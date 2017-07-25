@@ -1,5 +1,6 @@
 'use strict';
 
+let ApiAiApp = require('actions-on-google').ApiAiApp;
 let express = require('express');
 let bodyParser = require('body-parser');
 let chaussures = require('./ressources/chaussures.js');
