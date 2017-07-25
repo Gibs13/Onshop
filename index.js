@@ -45,7 +45,6 @@ app.post('/', function (req, res) {
 
       let prompt = 'colors';
       let colours = assistant.data.colours;
-      assistant.hasSurfaceCapability(assistant.SurfaceCapabilities.SCREEN_OUTPUT)
         assistant.setContext('select-color',3);
         let list = assistant.buildList();
         for (let i=0;i<colours.length;i++) {
@@ -85,7 +84,9 @@ app.post('/', function (req, res) {
     function change(){}
 
     function validate(assistant){
-      assistant.askForDeliveryAddress('to send your new shoes');
+
+      let address = assistant.getArgument('address');
+      assistant.ask("The reservation was made at "+address);
     }
 
     function shoeInfo(){}
