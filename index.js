@@ -86,7 +86,6 @@ app.post('/', function (req, res) {
 
     function validate(assistant){
       assistant.askForDeliveryAddress('to send your new shoes');
-
     }
 
     function shoeInfo(){}
@@ -100,7 +99,7 @@ app.post('/', function (req, res) {
       let prompt = 'validation';
       let color = assistant.data.color;
       let shoe = assistant.data.shoe;
-      assistant.setContext('validate',1);
+      assistant.setContext('validate',3);
       let basicCard = assistant.buildBasicCard()
         .setTitle('PRICE : '+chaussures[shoe].price+" €")
         .setBodyText(descriptions[shoe])
@@ -108,7 +107,7 @@ app.post('/', function (req, res) {
       let richResponse = assistant.buildRichResponse()
         .addSimpleResponse(prompt)
         .addBasicCard(basicCard);
-        assistant.ask(richResponse);
+      assistant.ask(richResponse);
     }
 
     // Mapping intentions
