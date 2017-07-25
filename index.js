@@ -52,6 +52,7 @@ app.post('/', function (req, res) {
           list.addItems(assistant.buildOptionItem(colours[i],colours[i])
             .setTitle(colours[i])
             .setImage(IMAGE+colours[i].replace(/ /g,"_")+'.jpg'));
+            console.log(IMAGE+colours[i].replace(/ /g,"_")+'.jpg');
         }
 
         assistant.askWithList(assistant.buildRichResponse()
