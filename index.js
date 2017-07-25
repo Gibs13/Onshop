@@ -81,8 +81,6 @@ app.post('/', function (req, res) {
 
     function selectedShoe(){}
 
-    function change(){}
-
     function validate(assistant){
 
       let address = assistant.getArgument('address');
@@ -93,7 +91,10 @@ app.post('/', function (req, res) {
 
     function change(assistant){
       let c = assistant.getArgument('changes');
-
+      if (c=='shoe') {
+      } else if (c=='color') {
+        outputColor(assistant);
+      }
     }
 
     function recapCard(assistant){
