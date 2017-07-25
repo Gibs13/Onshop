@@ -7,9 +7,9 @@ let chaussures = require('./ressources/chaussures.js');
 
 let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
-app.use('./images', express.static('ressources/images'));
+app.use('/images', express.static('ressources'));
 
-const IMAGE = 'https://on-running.herokuapp.com/images/'
+const IMAGE = 'https://on-running.herokuapp.com/images/images/'
 
 // Function Handler
 
