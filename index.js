@@ -7,7 +7,7 @@ let chaussures = require('./ressources/chaussures.js');
 
 let app = express();
 app.use(bodyParser.json({type: 'application/json'}));
-app.use('/ressources/images', express.static('images'));
+app.use('./images', express.static('ressources/images'));
 
 const IMAGE = 'https://on-running.herokuapp.com/images/'
 
