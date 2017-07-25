@@ -93,7 +93,7 @@ app.post('/', function (req, res) {
       let shoe = assistant.data.shoe;
       let basicCard = assistant.buildBasicCard()
         .setBodyText('price'+chaussures[shoe].price+"\n"+descriptions[shoe])
-        .setImage(IMAGE+shoe+'_'+color.replace(/ /g,"_"), shoe.toLowerCase());
+        .setImage(IMAGE+shoe+'_'+color.replace(/ /g,"_")+'.jpg', shoe.toLowerCase());
       let richResponse = assistant.buildRichResponse()
         .addSimpleResponse(prompt)
         .addBasicCard(basicCard);
