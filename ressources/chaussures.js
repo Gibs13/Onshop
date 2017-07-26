@@ -301,7 +301,7 @@ module.exports = {
             '49':[4]   }
     },
     'CLOUDVENTURE WATERPROOF': {
-        'tags': ['begin','endurance','performance','race','rain'],
+        'tags': ['trail','rain'],
         'price': '179.95',
         'colors': ['Black and Dark'],
         'size' :{

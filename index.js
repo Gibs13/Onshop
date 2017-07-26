@@ -51,9 +51,11 @@ app.post('/', function (req, res) {
           a++
         }
       }
+      if (assistant.data.colours === []) {
+        assistant.ask("I am sorry but it looks like we don't have any stock of this shoe for your size right now.");
+      } else {
       outputColor(assistant);
-      // On propose des couleurs avec une carte si on a un écran sinon on prends les trois premières couleurs et on permet de naviguer
-
+      }
     }
 
     function outputColor(assistant) {
