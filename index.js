@@ -80,6 +80,7 @@ app.post('/', function (req, res) {
 
       assistant.data.shoe = assistant.getContextArgument('commander','shoes').value;
       assistant.data.size = assistant.getContextArgument('commander','size').value;
+      console.log(assistant.data.shoe);
       possibleColor(assistant.data.shoe,assistant.data.size,assistant);
 
     }
