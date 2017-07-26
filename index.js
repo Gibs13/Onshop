@@ -11,6 +11,21 @@ app.use('/images', express.static('ressources'));
 
 const IMAGE = 'https://on-running.herokuapp.com/images/images/'
 
+// Create shoe finder by tags
+
+let shoeByTag = {};
+
+for (let modele in chaussures) {
+  let tags = chaussures[modele].tags;
+  for (let i=0;i<tags.length;i++) {
+  if (!shoeByTag[tags[i]]) {
+    shoeByTag[tags[i]] = [];
+  }
+  shoeByTag[tags[i]].push(modele);
+}}
+console.log(JSON.stringify(shoeByTag));
+
+
 // Function Handler
 
 
@@ -75,7 +90,7 @@ app.post('/', function (req, res) {
     }
 
     function selectedColor(assistant){
-      assistant.data.color = assistant.getArgument("colours")? assistant.getArgument("colours"):assistant.getContextArgument('actions_intent_option','OPTION').value;
+      assistant.data.color = assistant.getArgument("colour")? assistant.getArgument("colour"):assistant.getContextArgument('actions_intent_option','OPTION').value;
       recapCard(assistant);
     }
 
@@ -87,7 +102,33 @@ app.post('/', function (req, res) {
       assistant.ask("The reservation was made at "+address);
     }
 
-    function shoeInfo(){}
+    function shoeFinder(assistant){
+      let activity = assistant.getContextArgument('shoe-finder','activity').value;
+      let conditions = assistant.getContextArgument('shoe-finder','conditions').value;
+      
+      let choices = shoeByTag[activity];
+      for (let i=0;i<shoeByTag[conditions].length;i++) {
+        let shoe = shoeByTag[conditions][i]
+        let index = choices.indexOf(shoe);
+        if (index!=-1) {
+          for (let j=index;j>0;j--) {
+            choices[j] = choices[j-1];
+          }
+          choices[0] = shoe;
+        } else {
+          choices.push(shoe);
+        }
+      }
+      let carousel = assistant.buildCarousel()
+      for (let i=0;i<choices.length;i++) {
+        let shoe = choices[i];
+        carousel.addItems(assistant.buildOptionItem(shoe)
+          .setTitle(shoe.toLowerCase())
+          .setDescription(descriptions[shoe])
+          .setImage(IMAGE+shoe.replace(/ /g,"_")+'_'+chaussures[shoe].colors[0].replace(/ /g,"_")+'.jpg', shoe.toLowerCase()));
+      }
+      assistant.askWithCarousel(assistant.buildRichResponse().addSimpleResponse('select shoe'),carousel);
+    }
 
     function change(assistant){
       let c = assistant.getArgument('changes');
@@ -105,7 +146,7 @@ app.post('/', function (req, res) {
       let basicCard = assistant.buildBasicCard()
         .setTitle('PRICE : '+chaussures[shoe].price+" €")
         .setBodyText(descriptions[shoe])
-        .setImage(IMAGE+shoe+'_'+color.replace(/ /g,"_")+'.jpg', shoe.toLowerCase());
+        .setImage(IMAGE+shoe.replace(/ /g,"_")+'_'+color.replace(/ /g,"_")+'.jpg', shoe.toLowerCase());
       let richResponse = assistant.buildRichResponse()
         .addSimpleResponse(prompt)
         .addBasicCard(basicCard);
@@ -120,6 +161,7 @@ app.post('/', function (req, res) {
     actionMap.set('selectedColor', selectedColor);
     actionMap.set('validate',validate);
     actionMap.set('change',change);
+    actionMap.set('shoe-finder',shoeFinder)
 
 
     assistant.handleRequest(actionMap);
