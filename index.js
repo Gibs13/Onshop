@@ -72,13 +72,6 @@ app.post('/', function (req, res) {
         .addSimpleResponse(prompt),list);
     }
 
-    function navigate(assistant) {
-
-      // On regarde si l'utilisateur souhaite naviguer vers l'avant ou l'arrière puis on lui fourni les couleurs correspondantes
-
-      
-    }
-
     function commander(assistant) {
 
       // On récupère la taille et le modèle de la chaussure puis on va chercher les couleurs possibles
@@ -110,9 +103,9 @@ app.post('/', function (req, res) {
       let activity = assistant.getContextArgument('shoe-finder','activity').value;
       let conditions = assistant.getContextArgument('shoe-finder','conditions').value;
       
-      let choices = shoeByTag[activity];
-      for (let i=0;i<shoeByTag[conditions].length;i++) {
-        let shoe = shoeByTag[conditions][i]
+      let choices = shoeByTag[conditions];
+      for (let i=0;i<shoeByTag[activity].length;i++) {
+        let shoe = shoeByTag[activity][i]
         let index = choices.indexOf(shoe);
         if (index!=-1) {
           for (let j=index;j>0;j--) {
