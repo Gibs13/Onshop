@@ -54,6 +54,12 @@ app.post('/', function (req, res) {
       if (assistant.data.colours === []) {
         assistant.ask("I am sorry but it looks like we don't have any stock of this shoe for your size right now.");
       } else {
+        if (assistant.data.colours.length == 1) {
+          assistant.data.color = assistant.data.colours[0];
+          assistant.data.message = "We only have this color";
+          recapCard(assistant);
+          return;
+        }
       outputColor(assistant);
       }
     }
@@ -80,7 +86,6 @@ app.post('/', function (req, res) {
 
       assistant.data.shoe = assistant.getContextArgument('commander','shoes').value;
       assistant.data.size = assistant.getContextArgument('commander','size').value;
-      console.log(assistant.data.shoe);
       possibleColor(assistant.data.shoe,assistant.data.size,assistant);
 
     }
@@ -150,6 +155,7 @@ app.post('/', function (req, res) {
     }
 
     function recapCard(assistant){
+      let message = assistant.data.message?assistant.data.message:'';
       let prompt = 'validation';
       let color = assistant.data.color;
       let shoe = assistant.data.shoe;
@@ -159,7 +165,7 @@ app.post('/', function (req, res) {
         .setBodyText(descriptions[shoe])
         .setImage(IMAGE+shoe.replace(/ /g,"_")+'_'+color.replace(/ /g,"_")+'.jpg', shoe.toLowerCase());
       let richResponse = assistant.buildRichResponse()
-        .addSimpleResponse(prompt)
+        .addSimpleResponse(message + prompt)
         .addBasicCard(basicCard);
       assistant.ask(richResponse);
     }
