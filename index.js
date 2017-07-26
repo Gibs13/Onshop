@@ -94,7 +94,11 @@ app.post('/', function (req, res) {
       recapCard(assistant);
     }
 
-    function selectedShoe(){}
+    function selectedShoe(assistant){
+      assistant.data.shoe = assistant.getContextArgument('actions_intent_option','OPTION').value;
+      assistant.data.size = assistant.getContextArgument('shoe-finder','size').value;
+      possibleColor(assistant.data.shoe,assistant.data.size,assistant);
+    }
 
     function validate(assistant){
 
@@ -127,6 +131,7 @@ app.post('/', function (req, res) {
           .setDescription(descriptions[shoe])
           .setImage(IMAGE+shoe.replace(/ /g,"_")+'_'+chaussures[shoe].colors[0].replace(/ /g,"_")+'.jpg', shoe.toLowerCase()));
       }
+      assistant.setContext('select-shoe',3);
       assistant.askWithCarousel(assistant.buildRichResponse().addSimpleResponse('select shoe'),carousel);
     }
 
