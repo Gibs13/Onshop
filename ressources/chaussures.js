@@ -139,7 +139,7 @@ module.exports = {
             '49':[4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0]   }
     },
     'CLOUDFLYER': {
-        'tags': ['begin','street','endurance'],
+        'tags': ['endurance','street','begin'],
         'price': '169.95',
         'colors': ['Rock and Black','Glacier and Spice','Storm and Flash','Grey and Jade','Slate and Flash','White and Crystal'],
         'size' :{
@@ -220,7 +220,7 @@ module.exports = {
             '49':[8]   }
     },
     'CLOUDVENTURE MIDTOP': {
-        'tags': ['begin','endurance','trail'],
+        'tags': ['endurance','trail','begin'],
         'price': '169.95',
         'colors': ['Forest and Grey','Mulberry and Grey'],
         'size' :{
@@ -247,7 +247,7 @@ module.exports = {
             '49':[4,0]   }
     },
     'CLOUDVENTURE': {
-        'tags': ['begin','performance','trail'],
+        'tags': ['performance','trail','begin'],
         'price': '159.95',
         'colors': ['Grey and Sulphur','River and Signal','Flame and Shadow','Grey and Lava','Mint and Storm','Horizon and Sulphur'],
         'size' :{

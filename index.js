@@ -104,7 +104,11 @@ app.post('/', function (req, res) {
     function shoeFinder(assistant){
       let activity = assistant.getContextArgument('shoe-finder','activity').value;
       let conditions = assistant.getContextArgument('shoe-finder','conditions').value;
-      
+
+      outputShoe(activity,conditions,assistant);
+    }
+
+    function outputShoe(activity,conditions,assistant) {
       let choices = shoeByTag[conditions];
       for (let i=0;i<shoeByTag[activity].length;i++) {
         let shoe = shoeByTag[activity][i]
@@ -133,6 +137,12 @@ app.post('/', function (req, res) {
     function change(assistant){
       let c = assistant.getArgument('changes');
       if (c=='shoe') {
+        if (!!assistant.getContext('commander')) {
+          let tags = chaussures[assistant.data.shoe].tags;
+          outputShoe(tags[0],tags[1],assistant);
+        } else if (!!assistant.getContext('shoe-finder')){
+          shoeFinder(assistant);
+        }
       } else if (c=='color') {
         outputColor(assistant);
       }
