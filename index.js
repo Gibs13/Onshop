@@ -166,7 +166,8 @@ app.post('/', function (req, res) {
     actionMap.set('selectedColor', selectedColor);
     actionMap.set('validate',validate);
     actionMap.set('change',change);
-    actionMap.set('shoe-finder',shoeFinder)
+    actionMap.set('shoe-finder',shoeFinder);
+    actionMap.set('selectedShoe', selectedShoe);
 
 
     assistant.handleRequest(actionMap);
