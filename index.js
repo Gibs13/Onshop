@@ -22,16 +22,18 @@ const SHOE  ="";
 
 // Create shoe finder by tags
 
-let shoeByTag = {};
+function shoeByTagConstructor(){
+  for (let modele in chaussures) {
+    let tags = chaussures[modele].tags;
+    for (let i=0;i<tags.length;i++) {
+    if (!this[tags[i]]) {
+     this[tags[i]] = [];
+    }
+    this[tags[i]].push(modele);
+  }}
+}
 
-for (let modele in chaussures) {
-  let tags = chaussures[modele].tags;
-  for (let i=0;i<tags.length;i++) {
-  if (!shoeByTag[tags[i]]) {
-    shoeByTag[tags[i]] = [];
-  }
-  shoeByTag[tags[i]].push(modele);
-}}
+const shoeByTag = new shoeByTagConstructor();
 console.log(JSON.stringify(shoeByTag));
 
 
@@ -124,7 +126,7 @@ app.post('/', function (req, res) {
     }
 
     function outputShoe(activity,conditions,assistant) {
-      let choices = shoeByTag[conditions];
+      var choices = shoeByTag[conditions];
       console.log(shoeByTag[conditions]);
       console.log(choices);
       for (let i=0;i<shoeByTag[activity].length;i++) {
