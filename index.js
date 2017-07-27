@@ -33,7 +33,7 @@ function shoeByTagConstructor(){
   }}
 }
 
-const shoeByTag = Object.freeze(new shoeByTagConstructor());
+const shoeByTag = new shoeByTagConstructor();
 console.log(JSON.stringify(shoeByTag));
 
 
@@ -49,8 +49,11 @@ app.post('/', function (req, res) {
         return array[Math.floor(Math.random() * (array.length))];
     }
 
-    function possibleColor(shoe,size,assistant) {
+    function possibleColor(assistant) {
       
+      let shoe = assistant.data.shoe;
+      let size = assistant.data.size;
+
       assistant.data.colours = [];
       let number = chaussures[shoe]['size'][size];
       let colors = chaussures[shoe]['colors'];
@@ -97,7 +100,7 @@ app.post('/', function (req, res) {
 
       assistant.data.shoe = assistant.getContextArgument('commander','shoes').value;
       assistant.data.size = assistant.getContextArgument('commander','size').value;
-      possibleColor(assistant.data.shoe,assistant.data.size,assistant);
+      possibleColor(assistant);
 
     }
 
@@ -109,7 +112,7 @@ app.post('/', function (req, res) {
     function selectedShoe(assistant){
       assistant.data.shoe = assistant.getContextArgument('actions_intent_option','OPTION').value;
       assistant.data.size = assistant.getContextArgument('shoe-finder','size').value;
-      possibleColor(assistant.data.shoe,assistant.data.size,assistant);
+      possibleColor(assistant);
     }
 
     function validate(assistant){
@@ -132,7 +135,6 @@ app.post('/', function (req, res) {
       for (let i=0;i<shoesByTag[activity].length;i++) {
         let shoe = shoesByTag[activity][i];
         let index = choices.indexOf(shoe);
-        console.log(shoe+'  '+index);
         if (index!=-1) {
           for (let j=index;j>0;j--) {
             choices[j] = choices[j-1];
@@ -142,7 +144,6 @@ app.post('/', function (req, res) {
           choices.push(shoe);
         }
       }
-      console.log(shoeByTag[conditions]);
       let carousel = assistant.buildCarousel()
       for (let i=0;i<choices.length;i++) {
         let shoe = choices[i];
@@ -163,6 +164,9 @@ app.post('/', function (req, res) {
         outputShoe(tags[0],tags[1],assistant);
       } else if (c=='color') {
         outputColor(assistant);
+      } else if (c=='size') {
+        assistant.setContext('changeSize',1);
+        assistant.ask("What's your feet size ?");
       }
     }
 
@@ -182,6 +186,12 @@ app.post('/', function (req, res) {
       assistant.ask(richResponse);
     }
 
+    function changedSize(assistant) {
+      assistant.data.size = assistant.getContextArgument('changeSize','sizes').value;
+      assistant.setContext(changeSize,0);
+      possibleColor(assistant);
+    }
+
     function quit (assistant) {
         assistant.tell(R(BYE));
     }
@@ -197,6 +207,7 @@ app.post('/', function (req, res) {
     actionMap.set('shoe-finder',shoeFinder);
     actionMap.set('selectedShoe', selectedShoe);
     actionMap.set('quit', quit);
+    actionMap.set('changedSize',changedSize);
 
     assistant.handleRequest(actionMap);
 });
