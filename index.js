@@ -124,7 +124,8 @@ app.post('/', function (req, res) {
     }
 
     function outputShoe(activity,conditions,assistant) {
-      let choices = shoeByTag[conditions];
+      let choices = []
+      choices = shoeByTag[conditions];
       for (let i=0;i<shoeByTag[activity].length;i++) {
         let shoe = shoeByTag[activity][i]
         let index = choices.indexOf(shoe);
