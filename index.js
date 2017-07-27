@@ -33,7 +33,7 @@ function shoeByTagConstructor(){
   }}
 }
 
-const shoeByTag = new shoeByTagConstructor();
+const shoeByTag = Object.freeze(new shoeByTagConstructor());
 console.log(JSON.stringify(shoeByTag));
 
 
