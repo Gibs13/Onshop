@@ -11,6 +11,15 @@ app.use('/images', express.static('ressources'));
 
 const IMAGE = 'https://on-running.herokuapp.com/images/images/'
 
+const BYE = ["Alright then, come back soon ! ","Well, goodbye. See you soon.","You're leaving yet ? Until next time !"];
+const ONLYCOLOR
+const NOSIZE
+const BUYED
+const COLORS
+const VALIDATE
+const SHOE 
+
+
 // Create shoe finder by tags
 
 let shoeByTag = {};
@@ -56,7 +65,7 @@ app.post('/', function (req, res) {
       } else {
         if (assistant.data.colours.length == 1) {
           assistant.data.color = assistant.data.colours[0];
-          assistant.data.message = "We only have this color";
+          assistant.data.message = "We only have this color ";
           recapCard(assistant);
           return;
         }
@@ -104,7 +113,7 @@ app.post('/', function (req, res) {
     function validate(assistant){
 
       let address = assistant.getArgument('address');
-      assistant.ask("The reservation was made at "+address);
+      assistant.ask("The shoes will be delivered at "+address);
     }
 
     function shoeFinder(assistant){
@@ -119,6 +128,7 @@ app.post('/', function (req, res) {
       for (let i=0;i<shoeByTag[activity].length;i++) {
         let shoe = shoeByTag[activity][i]
         let index = choices.indexOf(shoe);
+        console.log(shoe+'  '+index);
         if (index!=-1) {
           for (let j=index;j>0;j--) {
             choices[j] = choices[j-1];
@@ -136,6 +146,7 @@ app.post('/', function (req, res) {
           .setDescription(descriptions[shoe])
           .setImage(IMAGE+shoe.replace(/ /g,"_")+'_'+chaussures[shoe].colors[0].replace(/ /g,"_")+'.jpg', shoe.toLowerCase()));
       }
+
       assistant.setContext('select-shoe',3);
       assistant.askWithCarousel(assistant.buildRichResponse().addSimpleResponse('select shoe'),carousel);
     }
@@ -143,12 +154,8 @@ app.post('/', function (req, res) {
     function change(assistant){
       let c = assistant.getArgument('changes');
       if (c=='shoe') {
-        if (!!assistant.getContext('commander')) {
-          let tags = chaussures[assistant.data.shoe].tags;
-          outputShoe(tags[0],tags[1],assistant);
-        } else if (!!assistant.getContext('shoe-finder')){
-          shoeFinder(assistant);
-        }
+        let tags = chaussures[assistant.data.shoe].tags;
+        outputShoe(tags[0],tags[1],assistant);
       } else if (c=='color') {
         outputColor(assistant);
       }
@@ -170,6 +177,10 @@ app.post('/', function (req, res) {
       assistant.ask(richResponse);
     }
 
+    function quit (assistant) {
+        assistant.tell(R(BYE));
+    }
+
     // Mapping intentions
 
     let actionMap = new Map();
@@ -180,7 +191,7 @@ app.post('/', function (req, res) {
     actionMap.set('change',change);
     actionMap.set('shoe-finder',shoeFinder);
     actionMap.set('selectedShoe', selectedShoe);
-
+    actionMap.set('quit', quit);
 
     assistant.handleRequest(actionMap);
 });
