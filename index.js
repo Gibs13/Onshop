@@ -126,11 +126,12 @@ app.post('/', function (req, res) {
     }
 
     function outputShoe(activity,conditions,assistant) {
-      var choices = shoeByTag[conditions];
-      console.log(shoeByTag[conditions]);
+      var choices = [];
+      let shoesByTag = shoeByTag;
+      choices = shoesByTag[conditions]
       console.log(choices);
-      for (let i=0;i<shoeByTag[activity].length;i++) {
-        let shoe = shoeByTag[activity][i];
+      for (let i=0;i<shoesByTag[activity].length;i++) {
+        let shoe = shoesByTag[activity][i];
         let index = choices.indexOf(shoe);
         console.log(shoe+'  '+index);
         if (index!=-1) {
@@ -142,6 +143,7 @@ app.post('/', function (req, res) {
           choices.push(shoe);
         }
       }
+      console.log(shoeByTag[conditions]);
       let carousel = assistant.buildCarousel()
       for (let i=0;i<choices.length;i++) {
         let shoe = choices[i];
