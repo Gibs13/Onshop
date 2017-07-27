@@ -187,7 +187,7 @@ app.post('/', function (req, res) {
     }
 
     function changedSize(assistant) {
-      assistant.data.size = assistant.getContextArgument('changeSize','sizes').value;
+      assistant.data.size = assistant.getArgument('sizes');
       assistant.setContext(changeSize,0);
       possibleColor(assistant);
     }
