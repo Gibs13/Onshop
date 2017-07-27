@@ -12,12 +12,12 @@ app.use('/images', express.static('ressources'));
 const IMAGE = 'https://on-running.herokuapp.com/images/images/'
 
 const BYE = ["Alright then, come back soon ! ","Well, goodbye. See you soon.","You're leaving yet ? Until next time !"];
-const ONLYCOLOR
-const NOSIZE
-const BUYED
-const COLORS
-const VALIDATE
-const SHOE 
+const ONLYCOLOR ="";
+const NOSIZE ="";
+const BUYED ="";
+const COLORS ="";
+const VALIDATE ="";
+const SHOE  ="";
 
 
 // Create shoe finder by tags
