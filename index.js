@@ -12,12 +12,18 @@ app.use('/images', express.static('ressources'));
 const IMAGE = 'https://on-running.herokuapp.com/images/images/'
 
 const BYE = ["Alright then, come back soon ! ","Well, goodbye. See you soon.","You're leaving yet ? Until next time !"];
-const ONLYCOLOR ="";
-const NOSIZE ="";
-const BUYED ="";
-const COLORS ="";
-const VALIDATE ="";
-const SHOE  ="";
+const ONLYCOLOR = ["We only have this color. ",
+"That's the only color we have. "];
+const NOSIZE = ["I am sorry but it looks like we don't have any stock of this shoe for your size right now."];
+const BUYED = ["The shoes will be delivered at "];
+const COLORS = ["Here are the colors we have for this shoe."];
+const VALIDATE = ["Is everything right ?",
+"Should i finish the transaction ?",
+"Do you like this shoe ?"];
+const SHOE  = ["What shoe would you like ?",
+"Here's our collection.",
+"We recommand you those shoes."];
+const SIZE = ["What's your feet size ? "];
 
 
 // Create shoe finder by tags
@@ -66,11 +72,11 @@ app.post('/', function (req, res) {
         }
       }
       if (assistant.data.colours === []) {
-        assistant.ask("I am sorry but it looks like we don't have any stock of this shoe for your size right now.");
+        assistant.ask(R(NOSIZE));
       } else {
         if (assistant.data.colours.length == 1) {
           assistant.data.color = assistant.data.colours[0];
-          assistant.data.message = "We only have this color ";
+          assistant.data.message = R(ONLYCOLOR);
           recapCard(assistant);
           return;
         }
@@ -80,7 +86,7 @@ app.post('/', function (req, res) {
 
     function outputColor(assistant) {
 
-      let prompt = 'colors';
+      let prompt = R(COLORS);
       let colours = assistant.data.colours;
         assistant.setContext('select-color',3);
         let list = assistant.buildList();
@@ -116,9 +122,11 @@ app.post('/', function (req, res) {
     }
 
     function validate(assistant){
-
+      let n = chaussures[assistant.data.shoe].color.indexOf(assistant.data.color);
+      chaussures[assistant.data.shoe].size[assistant.data.size][n]--;
+      console.log(chaussures[assistant.data.shoe].size[assistant.data.size][n]);
       let address = assistant.getArgument('address');
-      assistant.ask("The shoes will be delivered at "+address);
+      assistant.ask(R(BUYED)+address);
     }
 
     function shoeFinder(assistant){
@@ -154,7 +162,7 @@ app.post('/', function (req, res) {
       }
 
       assistant.setContext('select-shoe',3);
-      assistant.askWithCarousel(assistant.buildRichResponse().addSimpleResponse('select shoe'),carousel);
+      assistant.askWithCarousel(assistant.buildRichResponse().addSimpleResponse(R(SHOE)),carousel);
     }
 
     function change(assistant){
@@ -166,13 +174,13 @@ app.post('/', function (req, res) {
         outputColor(assistant);
       } else if (c=='size') {
         assistant.setContext('changeSize',1);
-        assistant.ask("What's your feet size ?");
+        assistant.ask(R(SIZE));
       }
     }
 
     function recapCard(assistant){
       let message = assistant.data.message?assistant.data.message:'';
-      let prompt = 'validation';
+      let prompt = R(VALIDATE);
       let color = assistant.data.color;
       let shoe = assistant.data.shoe;
       assistant.setContext('validate',3);
