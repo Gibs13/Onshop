@@ -57,6 +57,7 @@ app.post('/', function (req, res) {
 
     function possibleColor(assistant) {
       
+      assistant.data.message = "";
       let shoe = assistant.data.shoe;
       let size = assistant.data.size;
 
