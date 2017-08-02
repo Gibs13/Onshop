@@ -123,7 +123,7 @@ app.post('/', function (req, res) {
     }
 
     function validate(assistant){
-      let n = chaussures[assistant.data.shoe].color.indexOf(assistant.data.color);
+      let n = chaussures[assistant.data.shoe].colors.indexOf(assistant.data.color);
       chaussures[assistant.data.shoe].size[assistant.data.size][n]--;
       console.log(chaussures[assistant.data.shoe].size[assistant.data.size][n]);
       let address = assistant.getArgument('address');
